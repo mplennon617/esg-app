@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  esg-backend:
+    build:
+      context: ./
+    ports:
+      - 5000:5000
