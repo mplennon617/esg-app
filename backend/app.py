@@ -10,7 +10,14 @@ def hello_world():
 
 @app.route('/profiles/<company>')
 def Quote(company):
-    return print(finnhub_client.quote('AAPL'))
+    #parse quotes for current stock price
+    pythonObj = json.loads(finnhub_client.quote(company))
+    currentPrice = pythonObj['c']
+    #parse financials as reported to get assets and gross profits
+    pythonObj = json.loads(finnhub_client.financials_reported(symbol=company, freq='annual'))
+    assets = pythonObj['report']['bs']['Assets']
+    grossProfits = pythonObj['report']['ic']['GrossProfit']
+    return currentPrice
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
