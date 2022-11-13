@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import Search from '../components/Search'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function Home() {
@@ -14,6 +15,8 @@ export default function Home() {
         <h1>Recommendation Trends</h1>
         <h1>Quote</h1>
        </div>
+
+    <Search></Search>
     </div>
   )
 }
