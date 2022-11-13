@@ -11,7 +11,8 @@ def hello_world():
 
 @app.route('/profiles/<company>')
 def CompanyProfile(company):
-    profile = "{"+RecommendationTrends(company)+","+Quote(company)+","+FinancialsReported(company)+"}"
+    profile = "{"+str(RecommendationTrends(company))+","+str(Quote(company))+","+str(FinancialsReported(company))+"}"
+    return profile
     
 def Quote(company):
     #parse quotes for current stock price
@@ -29,7 +30,7 @@ def FinancialsReported(company):
 
 def RecommendationTrends(company):
     #parse exert recomendation trends for recent periods
-    pythonObj = finnhub_client.recommendation_trends(company)
+    pythonObj = json.loads(finnhub_client.recommendation_trends(company))
     return "\"Recommendations\":"+pythonObj
 
 
