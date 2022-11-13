@@ -1,4 +1,5 @@
 import finnhub
+import json
 from flask import Flask
 app = Flask(__name__)
 
@@ -9,6 +10,9 @@ def hello_world():
     return 'Flask Dockerized'
 
 @app.route('/profiles/<company>')
+def CompanyProfile(company):
+    profile = "{"+RecommendationTrends(company)+","+Quote(company)+","+FinancialsReported(company)+"}"
+    
 def Quote(company):
     #parse quotes for current stock price
     pythonObj = json.loads(finnhub_client.quote(company))
@@ -27,8 +31,7 @@ def RecommendationTrends(company):
     #parse exert recomendation trends for recent periods
     pythonObj = finnhub_client.recommendation_trends(company)
     return "\"Recommendations\":"+pythonObj
-def CompanyProfile(company):
-    profile = RecommendationTrends(company)+","+Quote(company)+","+FinancialsReported(company)
+
 
 
 if __name__ == '__main__':
