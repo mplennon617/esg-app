@@ -1,5 +1,6 @@
 import finnhub
 import json
+import csv
 from flask import Flask
 app = Flask(__name__)
 
@@ -17,22 +18,44 @@ def CompanyProfile(company):
     
 def Quote(tick):
     #parse quotes for current stock price
-    pythonObj = json.loads(finnhub_client.quote(tick))
+    pythonObj = json.loads(str(finnhub_client.quote(tick)))
     currentPrice = pythonObj['c']
-    return "\"CurrentPrice\":"+currentPrice
+    return "\"CurrentPrice\":"+str(currentPrice)
 
 def FinancialsReported(tick):
     #parse financials as reported to get assets and gross profits
-    pythonObj = json.loads(finnhub_client.financials_reported(symbol=tick, freq='annual'))
+    pythonObj = json.loads(str(finnhub_client.financials_reported(symbol=tick, freq='annual')))
     assets = pythonObj['report']['bs']['Assets']
+    liability = pythonObj['report']['bs']['Liabilities']
+    revenue = pythonObj['report']['bs']['Revenues']
     grossProfits = pythonObj['report']['ic']['GrossProfit']
+    earningPerShare = pythonObj['report']['ic']['EarningsPerShareBasic']
+    console.log(pythonObj)
     date = pythonObj['year']
-    return "\"Assets\":"+assets+",\"GrossProfit\":"+grossProfits
+    return "\"Assets\":"+str(assets)+",\"Revenues\":"+str(revenue)+",\"Liabilities\":"+str(liability)+",\"GrossProfit\":"+str(grossProfits)
 
 def RecommendationTrends(tick):
     #parse exert recomendation trends for recent periods
-    pythonObj = json.loads(finnhub_client.recommendation_trends(tick))
-    return "\"Recommendations\":"+pythonObj
+    pythonObj = json.loads(str(finnhub_client.recommendation_trends(tick)))
+    return "\"Recommendations\":"+str(pythonObj)
+
+def EnvironmentalFactors(Company):
+    subIndustry = ""
+    industry = ""
+    #environmental intensities
+    intensitySales = []
+    intensityOpInc = []
+    totalEnvironmentalCost =[]
+    workingCapacity = []
+    fishProducts = []   
+
+    pythonObj = json.loads(open('/artifacts/EnvironmentalData.json').read()) 
+    
+
+                
+            
+        
+
 
 
 
