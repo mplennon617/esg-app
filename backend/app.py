@@ -13,11 +13,23 @@ def Quote(company):
     #parse quotes for current stock price
     pythonObj = json.loads(finnhub_client.quote(company))
     currentPrice = pythonObj['c']
+    return "\"CurrentPrice\":"+currentPrice
+
+def FinancialsReported(company):
     #parse financials as reported to get assets and gross profits
     pythonObj = json.loads(finnhub_client.financials_reported(symbol=company, freq='annual'))
     assets = pythonObj['report']['bs']['Assets']
     grossProfits = pythonObj['report']['ic']['GrossProfit']
-    return currentPrice
+    date = pythonObj['year']
+    return "\"Assets\":"+assets+",\"GrossProfit\":"+grossProfits
+
+def RecommendationTrends(company):
+    #parse exert recomendation trends for recent periods
+    pythonObj = finnhub_client.recommendation_trends(company)
+    return "\"Recommendations\":"+pythonObj
+def CompanyProfile(company):
+    profile = RecommendationTrends(company)+","+Quote(company)+","+FinancialsReported(company)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
