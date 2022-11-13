@@ -11,26 +11,27 @@ def hello_world():
 
 @app.route('/profiles/<company>')
 def CompanyProfile(company):
-    profile = "{"+str(RecommendationTrends(company))+","+str(Quote(company))+","+str(FinancialsReported(company))+"}"
+    ticker = finnhub_client.symbol_lookup(company) #get company ticker
+    profile = "{"+str(RecommendationTrends(ticker))+","+str(Quote(ticker))+","+str(FinancialsReported(ticker))+"}"
     return profile
     
-def Quote(company):
+def Quote(tick):
     #parse quotes for current stock price
-    pythonObj = json.loads(finnhub_client.quote(company))
+    pythonObj = json.loads(finnhub_client.quote(tick))
     currentPrice = pythonObj['c']
     return "\"CurrentPrice\":"+currentPrice
 
-def FinancialsReported(company):
+def FinancialsReported(tick):
     #parse financials as reported to get assets and gross profits
-    pythonObj = json.loads(finnhub_client.financials_reported(symbol=company, freq='annual'))
+    pythonObj = json.loads(finnhub_client.financials_reported(symbol=tick, freq='annual'))
     assets = pythonObj['report']['bs']['Assets']
     grossProfits = pythonObj['report']['ic']['GrossProfit']
     date = pythonObj['year']
     return "\"Assets\":"+assets+",\"GrossProfit\":"+grossProfits
 
-def RecommendationTrends(company):
+def RecommendationTrends(tick):
     #parse exert recomendation trends for recent periods
-    pythonObj = json.loads(finnhub_client.recommendation_trends(company))
+    pythonObj = json.loads(finnhub_client.recommendation_trends(tick))
     return "\"Recommendations\":"+pythonObj
 
 
